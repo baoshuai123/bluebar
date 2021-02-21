@@ -1,0 +1,142 @@
+basePath: /api/v1
+definitions:
+  controllers._ResponsePostList:
+    properties:
+      code:
+        description: 业务响应状态码
+        type: integer
+      data:
+        description: 数据
+        items:
+          $ref: '#/definitions/models.ApiPostDetail'
+        type: array
+      message:
+        description: 提示信息
+        type: string
+    type: object
+  models.ApiPostDetail:
+    properties:
+      author_id:
+        description: 作者id
+        type: integer
+      author_name:
+        description: 作者
+        type: string
+      community_id:
+        description: 社区id
+        type: integer
+      content:
+        description: 内容
+        type: string
+      create_time:
+        type: string
+      id:
+        type: integer
+      introduction:
+        type: string
+      name:
+        type: string
+      status:
+        description: 状态
+        type: integer
+      title:
+        description: 标题
+        type: string
+      vote_num:
+        description: 投票分数
+        type: integer
+    required:
+    - community_id
+    - content
+    - title
+    type: object
+host: localhost:8080
+info:
+  contact:
+    name: jack bao
+  description: 这是一个贴吧
+  license:
+    name: Apache 2.0
+  title: bluebell
+  version: "1.0"
+paths:
+  /post:
+    post:
+      consumes:
+      - application/json
+      description: 发帖
+      parameters:
+      - description: Bearer JWT
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 作者id
+        in: query
+        name: author_id
+        type: integer
+      - description: 社区id
+        in: query
+        name: community_id
+        required: true
+        type: integer
+      - description: 内容
+        in: query
+        name: content
+        required: true
+        type: string
+      - description: 生成时间
+        in: query
+        name: create_time
+        type: string
+      - example: "0"
+        in: query
+        name: id
+        type: string
+      - description: 状态
+        in: query
+        name: status
+        type: integer
+      - description: 标题
+        in: query
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: 发帖
+      tags:
+      - 帖子相关接口(api分组展示使用的)
+  /posts2:
+    get:
+      consumes:
+      - application/json
+      description: 可按社区按时间或分数排序查询帖子列表接口
+      parameters:
+      - description: Bearer JWT
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 查询参数
+        in: query
+        name: models.ParamPostList
+        type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers._ResponsePostList'
+      security:
+      - ApiKeyAuth: []
+      summary: 升级版帖子列表接口
+      tags:
+      - 帖子相关接口(api分组展示使用的)
+swagger: "2.0"
